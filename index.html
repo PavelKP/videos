@@ -1,0 +1,98 @@
+<style>
+	.video-unique {
+		object-fit: cover;
+		border-radius: 100%;
+		width: 240px;
+		height: 240px;
+		margin: 5px;
+	}
+
+	.videos_wrapper {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	@media (min-width: 970px) {
+		.videos_wrapper {
+			flex-direction: row;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+	}
+</style>
+
+<section class="videos_wrapper">
+	<video class="video45 video-unique" width="240" muted playsinline data-id="0">
+		<source src="https://github.com/PavelKP/videos/raw/main/video.mp4" type="video/mp4">
+		Your browser doesn't support HTML5 video tag.
+	</video>
+	<video class="video46 video-unique" width="240" muted playsinline data-id="1">
+		<source src="https://github.com/PavelKP/videos/raw/main/telegram_video_1.mp4" type="video/mp4">
+		Your browser doesn't support HTML5 video tag.
+	</video>
+	<video class="video47 video-unique" width="240" muted playsinline data-id="2">
+		<source src="https://github.com/PavelKP/videos/raw/main/telegram_video.mp4" type="video/mp4">
+		Your browser doesn't support HTML5 video tag.
+	</video>
+</section>
+
+
+<script type="text/javascript">
+	const videos = document.querySelectorAll(`.video-unique`);
+
+	const restVideos = {
+		rewind(el) {
+			el.muted = true;
+			el._isPlaying = false;
+			el.currentTime = 0;
+		},
+		playMuted(el, i) {
+			if (el.dataset.id !== i) {
+				this.rewind(el);
+				el.play();
+			}
+		},
+		pauseMuted(el, i) {
+			if (el.dataset.id !== i) {
+				this.rewind(el);
+				el.pause();
+			}
+		}
+	}
+
+	videos.forEach((video) => {
+		video.play();
+
+		video.addEventListener(`click`, (evt) => {
+			const i = evt.currentTarget.dataset.id;
+
+			if (video._isPlaying) {
+				video._isPlaying = false;
+				video.currentTime = 0;
+				video.muted = true;
+				video.play();
+
+				videos.forEach((el) => {
+					restVideos.playMuted(el, i);
+				});
+
+			} else {
+				video.currentTime = 0;
+				video.muted = false;
+				video.play();
+				video._isPlaying = true;
+
+				videos.forEach((el) => {
+					restVideos.pauseMuted(el, i);
+				});
+			}
+		});
+
+		video.addEventListener(`ended`, function () {
+			video.muted = true;
+			video.currentTime = 0;
+			video.play();
+		});
+	})
+</script>
